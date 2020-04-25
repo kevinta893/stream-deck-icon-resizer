@@ -18,7 +18,7 @@ namespace StreamDeckIconResizer
     /// </summary>
     public partial class ImageResizerPreview : UserControl
     {
-        private Brush _brush;
+        private double _scale;
         private ImageSource _imageSource;
 
         public ImageResizerPreview()
@@ -36,6 +36,22 @@ namespace StreamDeckIconResizer
                 ResizeImage.Source = value;
                 _imageSource = value;
             }
+        }
+
+        /// <summary>
+        /// Current scale of the image. 1.0 is the regular
+        /// size of the image
+        /// </summary>
+        public double Scale { get; private set; }
+
+        /// <summary>
+        /// Scales the foreground image by X percent
+        /// </summary>
+        /// <param name="percent">Expects a value between [0.0,1.0]. Beyond 1.0 will scale the image larger.</param>
+        public void ScaleImage (double scale)
+        {
+            _scale = scale;
+
         }
 
         public BitmapFrame CreateResizedImage(ImageSource source, int width, int height, int margin)

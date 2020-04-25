@@ -34,13 +34,29 @@ namespace StreamDeckIconResizer
             InitializeComponent();
         }
 
+        public void LoadImageFile(Uri fileUri)
+        {
+            var originalImage = new BitmapImage(fileUri);
+            _workingImage = new WriteableBitmap(originalImage);
+            ResizeImage.Source = _workingImage;
+            CurrentFileLabel.Content = fileUri.AbsolutePath.ToString();
+        }
+
+        private void UpdateScaleText(double percent)
+        {
+            var formattedPercent = (percent * 100).ToString("0.0");
+            ResizePropertiesLabel.Text = $"Scale: {formattedPercent}";
+        }
+
+        #region UI Events
+
         private void ResizeImage_Drop(object sender, DragEventArgs e)
         {
             // Get file path of the dropped item
             var filePath = "";
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                filePath = ((string[]) e.Data.GetData(DataFormats.FileDrop))[0];
+                filePath = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
             }
 
             // Load image
@@ -54,12 +70,14 @@ namespace StreamDeckIconResizer
             e.Handled = true;
         }
 
-        public void LoadImageFile(Uri fileUri)
+        private void IconScaleSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var originalImage = new BitmapImage(fileUri);
-            _workingImage = new WriteableBitmap(originalImage);
-            ResizeImage.Source = _workingImage;
-            CurrentFileLabel.Content = fileUri.AbsolutePath.ToString();
+            if (!IsLoaded) { return; }
+            var percentScale = e.NewValue / ImageScaleSlider.Maximum;
+            UpdateScaleText(percentScale);
+            ResizeImage.ScaleImage(percentScale);
         }
+
+        #endregion
     }
 }
