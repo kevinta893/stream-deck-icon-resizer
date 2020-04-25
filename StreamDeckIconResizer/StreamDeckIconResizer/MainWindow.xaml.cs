@@ -24,12 +24,10 @@ namespace StreamDeckIconResizer
 
         private readonly IEnumerable<string> SupportedImageFormats = new List<string>()
         {
-            ".jpg",
-            ".bmp",
-            ".gif",
-            ".svg",
-            ".png"
+            ".jpg", ".bmp", ".gif", ".svg", ".png",
         };
+
+        private WriteableBitmap _workingImage;
 
         public MainWindow()
         {
@@ -49,20 +47,19 @@ namespace StreamDeckIconResizer
             var isSupportedFileExtension = SupportedImageFormats.Any(ext => ext == System.IO.Path.GetExtension(filePath));
             if (File.Exists(filePath) && isSupportedFileExtension)
             {
-                LoadImageFile(filePath);
+                var absoluteUri = new Uri(filePath);
+                LoadImageFile(absoluteUri);
             }
 
             e.Handled = true;
         }
 
-        public void LoadImageFile(string imageFilePath)
+        public void LoadImageFile(Uri fileUri)
         {
-            ResizeImage.Source = new BitmapImage(new Uri(imageFilePath));
-        }
-
-        private void ResizeImage_MouseMove(object sender, MouseEventArgs e)
-        {
-
+            var originalImage = new BitmapImage(fileUri);
+            _workingImage = new WriteableBitmap(originalImage);
+            ResizeImage.Source = _workingImage;
+            CurrentFileLabel.Content = fileUri.AbsolutePath.ToString();
         }
     }
 }

@@ -10,4 +10,10 @@
     <None Remove="Typhoon Hagibis air pressure.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
