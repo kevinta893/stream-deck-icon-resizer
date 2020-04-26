@@ -83,5 +83,11 @@ namespace StreamDeckIconResizer
         }
 
         #endregion
+
+        private void ShowTransparencyBackgroundCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            var checkbox = (CheckBox)e.Source;
+            ResizeImage.TransparencyBackgroundVisible = checkbox.IsChecked.HasValue ? checkbox.IsChecked.Value : false;
+        }
     }
 }

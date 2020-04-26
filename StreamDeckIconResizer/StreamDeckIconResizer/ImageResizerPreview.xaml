@@ -7,7 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
     <Grid>
-        <Rectangle x:Name="BackgroundRect" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" Stretch="None" Fill="#FFDFDFDF" VerticalAlignment="Stretch"/>
+        <Rectangle x:Name="BackgroundRect" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" VerticalAlignment="Stretch" Fill="Transparent"/>
+        <Rectangle x:Name="TransparencyImage" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" VerticalAlignment="Stretch">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/Images/Assets/transparency_background.PNG" TileMode="Tile" Stretch="Fill"/>
+            </Rectangle.Fill>
+        </Rectangle>
         <Image x:Name="BackgroundImage" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Stretch="None"/>
         <Image x:Name="ResizeImage" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" Stretch="None"/>
         <local:ScaleGridOverlay x:Name="ScaleGridOverlay" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}"/>

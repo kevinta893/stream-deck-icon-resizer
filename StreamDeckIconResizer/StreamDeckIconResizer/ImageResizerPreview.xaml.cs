@@ -43,11 +43,26 @@ namespace StreamDeckIconResizer
             }
         }
 
+        public bool TransparencyBackgroundVisible {
+            get
+            {
+                return TransparencyImage.Visibility == Visibility.Visible;
+            } 
+            set 
+            {
+                TransparencyImage.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+            } 
+        }
+
         /// <summary>
         /// Current scale of the image. 1.0 is the regular
         /// size of the image
         /// </summary>
-        public double Scale { get; private set; }
+        public double Scale { 
+            get { 
+                return _scale; 
+            } 
+        }
 
         /// <summary>
         /// Scales the foreground image by X percent

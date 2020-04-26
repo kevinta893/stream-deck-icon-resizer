@@ -8,10 +8,11 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button x:Name="ResizeButton" Content="Resize!" HorizontalAlignment="Center" Margin="0,329,0,0" VerticalAlignment="Top" Height="80" Width="110" />
-        <Slider x:Name="ImageScaleSlider" HorizontalAlignment="Left" Height="30" Margin="10,394,0,0" VerticalAlignment="Top" Width="320" Maximum="1000" Minimum="1" ValueChanged="IconScaleSlider_ValueChanged"/>
+        <Slider x:Name="ImageScaleSlider" HorizontalAlignment="Left" Height="30" Margin="10,394,0,0" VerticalAlignment="Top" Width="320" Maximum="100" Minimum="1" ValueChanged="IconScaleSlider_ValueChanged" Value="100"/>
         <Label x:Name="CurrentFileLabel" Content="Drag and drop an image to start" HorizontalAlignment="Left" Height="34" Margin="10,10,0,0" VerticalAlignment="Top" Width="325"/>
         <local:ImageResizerPreview x:Name="ResizeImage" HorizontalAlignment="Left" Height="320" Margin="10,59,0,0" VerticalAlignment="Top" Width="320" AllowDrop="True" Drop="ResizeImage_Drop" Background="#FFF0F0F0"/>
         <TextBlock x:Name="ResizePropertiesLabel" HorizontalAlignment="Center" Margin="0,59,0,0" Text="Scale: 100%" TextWrapping="Wrap" VerticalAlignment="Top" Height="65" Width="110" Background="#FFF1F1F1" Padding="5,5,5,0"/>
+        <CheckBox x:Name="ShowTransparencyBackgroundCheckbox" Content="Show Transparency Grid" HorizontalAlignment="Left" Margin="345,129,0,0" VerticalAlignment="Top" Click="ShowTransparencyBackgroundCheckbox_Click" IsChecked="True"/>
 
     </Grid>
 </Window>
