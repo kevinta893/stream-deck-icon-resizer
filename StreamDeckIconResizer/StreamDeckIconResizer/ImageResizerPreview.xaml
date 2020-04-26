@@ -7,8 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
     <Grid>
-        <Rectangle x:Name="BackgroundRect" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=Tb}" Width="{Binding ActualWidth, ElementName=Tb}" AllowDrop="True" Stretch="Fill" Fill="#FFDFDFDF"/>
-        <Image x:Name="BackgroundImage" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=Tb}" Width="{Binding ActualWidth, ElementName=Tb}" AllowDrop="True" Stretch="Fill"/>
-        <Image x:Name="ResizeImage" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=Tb}" Width="{Binding ActualWidth, ElementName=Tb}" AllowDrop="True" Stretch="Fill"/>
+        <Rectangle x:Name="BackgroundRect" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" Stretch="None" Fill="#FFDFDFDF" VerticalAlignment="Stretch"/>
+        <Image x:Name="BackgroundImage" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Stretch="None"/>
+        <Image x:Name="ResizeImage" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" Stretch="None"/>
+        <local:ScaleGridOverlay x:Name="ScaleGridOverlay" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}"/>
+        <Rectangle x:Name="ForegroundDragDrop" HorizontalAlignment="Stretch" Height="{Binding ActualHeight}" Width="{Binding ActualWidth}" AllowDrop="True" Stretch="Fill" Fill="Transparent"/>
     </Grid>
 </UserControl>

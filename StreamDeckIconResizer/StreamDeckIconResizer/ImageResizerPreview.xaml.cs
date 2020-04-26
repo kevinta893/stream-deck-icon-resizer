@@ -20,10 +20,14 @@ namespace StreamDeckIconResizer
     {
         private double _scale;
         private ImageSource _imageSource;
+        private readonly double _originalWidth;
+        private readonly double _originalHeight;
 
         public ImageResizerPreview()
         {
             InitializeComponent();
+            _originalWidth = BackgroundRect.ActualWidth;
+            _originalHeight = BackgroundRect.ActualHeight;
         }
 
         public ImageSource Source { 
@@ -35,6 +39,7 @@ namespace StreamDeckIconResizer
             {
                 ResizeImage.Source = value;
                 _imageSource = value;
+                ScaleImage(_scale);
             }
         }
 
@@ -51,12 +56,23 @@ namespace StreamDeckIconResizer
         public void ScaleImage (double scale)
         {
             _scale = scale;
-
+            var resizeWidth = (int) Math.Max(BackgroundRect.ActualWidth * scale, 1.0);
+            var resizeHeight = (int) Math.Max(BackgroundRect.ActualHeight * scale, 1.0);
+            var resizedImage = CreateResizedImage(_imageSource, resizeWidth, resizeHeight);
+            ResizeImage.Source = resizedImage;
         }
 
-        public BitmapFrame CreateResizedImage(ImageSource source, int width, int height, int margin)
+
+        /// <summary>
+        /// Resizes an image to fit inside a given width and height
+        /// </summary>
+        /// <param name="source">Source image</param>
+        /// <param name="width">Destination width</param>
+        /// <param name="height">Destination height</param>
+        /// <returns></returns>
+        public static BitmapFrame CreateResizedImage(ImageSource source, int width, int height)
         {
-            var rect = new Rect(margin, margin, width - margin * 2, height - margin * 2);
+            var rect = new Rect(0, 0, width, height);
 
             var group = new DrawingGroup();
             RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);

@@ -28,6 +28,7 @@ namespace StreamDeckIconResizer
         };
 
         private WriteableBitmap _workingImage;
+        private string _workingImagePath;
 
         public MainWindow()
         {
@@ -38,8 +39,11 @@ namespace StreamDeckIconResizer
         {
             var originalImage = new BitmapImage(fileUri);
             _workingImage = new WriteableBitmap(originalImage);
-            ResizeImage.Source = _workingImage;
-            CurrentFileLabel.Content = fileUri.AbsolutePath.ToString();
+            ResizeImage.Source = originalImage;
+
+            var filePath = fileUri.AbsolutePath.ToString();
+            _workingImagePath = filePath;
+            CurrentFileLabel.Content = filePath;
         }
 
         private void UpdateScaleText(double percent)
