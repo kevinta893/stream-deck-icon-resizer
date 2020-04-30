@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -46,7 +47,9 @@ namespace StreamDeckIconResizer
             var fileStream = new FileStream(filePathAsPng, FileMode.Create);
             try
             {
-                image.SaveAsPng(fileStream);
+                var encodingOptions = new PngEncoder();
+                encodingOptions.ColorType = PngColorType.RgbWithAlpha;
+                image.SaveAsPng(fileStream, encodingOptions);
             }
             catch (Exception ex)
             {
