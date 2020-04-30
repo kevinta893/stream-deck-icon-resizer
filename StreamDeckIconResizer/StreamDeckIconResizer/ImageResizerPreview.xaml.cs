@@ -1,5 +1,10 @@
-﻿using SixLabors.ImageSharp.PixelFormats;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using Svg;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,6 +20,8 @@ namespace StreamDeckIconResizer
     {
         private ImageSource _imageSource;
         private Uri _iconPath;
+        private const int CanvasWidth = 1000;
+        private const int CanvasHeight = 1000;
 
         public ImageResizerPreview()
         {
@@ -23,7 +30,19 @@ namespace StreamDeckIconResizer
 
         public void LoadImageFile(Uri fileUri, double scale = 1.0)
         {
-            var originalImage = new BitmapImage(fileUri);
+            BitmapImage originalImage;
+            if (Path.GetExtension(fileUri.AbsolutePath) == ".svg")
+            {
+                SvgDocument svgDocument = SvgDocument.Open(fileUri.AbsolutePath);
+                var svgImage = svgDocument.Draw(CanvasWidth, CanvasHeight);
+                originalImage = Bitmap2BitmapImage(svgImage);
+            }
+            else
+            {
+                originalImage = new BitmapImage(fileUri);
+
+            }
+
             _imageSource = originalImage;
             _iconPath = fileUri;
             ScaleImage(scale);
@@ -66,20 +85,34 @@ namespace StreamDeckIconResizer
                 return;
             }
 
-            //Saves the image as png
-            using (var icon = Image.Load<Rgba32>(_iconPath.AbsolutePath))
+            var imageExtension = Path.GetExtension(_iconPath.AbsolutePath);
+
+            Image<Rgba32> icon;
+            if (imageExtension == ".svg")
             {
-                var canvasWidth = 512;
-                var canvasHeight = 512;
-                var resizeWidth = (int)Math.Max(canvasWidth * Scale, 1.0);
-                var resizeHeight = (int)Math.Max(canvasHeight * Scale, 1.0);
+                SvgDocument svgDocument = SvgDocument.Open(_iconPath.AbsolutePath);
+                var iconBitmap = svgDocument.Draw(CanvasWidth, CanvasHeight);
+                ImageConverter converter = new ImageConverter();
+                var rawIconBytes = (byte[]) converter.ConvertTo(iconBitmap, typeof(byte[]));
+                icon = Image.Load<Rgba32>(rawIconBytes);
+            }
+            else
+            {
+                icon = Image.Load<Rgba32>(_iconPath.AbsolutePath);
+            }
+
+            //Saves the image as png
+            using (icon)
+            {
+                var resizeWidth = (int)Math.Max(CanvasWidth * Scale, 1.0);
+                var resizeHeight = (int)Math.Max(CanvasHeight * Scale, 1.0);
 
 
-                using (var resizedImage = IconResizer.ResizeImage(icon, resizeWidth, resizeHeight, canvasWidth, canvasHeight))
+                using (var resizedImage = IconResizer.ResizeImage(icon, resizeWidth, resizeHeight, CanvasWidth, CanvasHeight))
                 {
                     var fullPath = _iconPath.AbsolutePath;
-                    var originalFilePath = System.IO.Path.GetFullPath(fullPath);
-                    var resizedFileName = System.IO.Path.GetFileNameWithoutExtension(fullPath);
+                    var originalFilePath = Path.GetFullPath(fullPath);
+                    var resizedFileName = Path.GetFileNameWithoutExtension(fullPath);
                     var resizedFilePath = originalFilePath + "_resized.png";
                     IconResizer.SaveImagePng(resizedImage, resizedFilePath);
                 }
@@ -112,6 +145,24 @@ namespace StreamDeckIconResizer
             resizedImage.Render(drawingVisual);
 
             return BitmapFrame.Create(resizedImage);
+        }
+
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+
+        private BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
         }
     }
 }
