@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace StreamDeckIconResizer
 {
@@ -18,29 +13,20 @@ namespace StreamDeckIconResizer
     /// </summary>
     public partial class ImageResizerPreview : UserControl
     {
-        private double _scale;
         private ImageSource _imageSource;
-        private readonly double _originalWidth;
-        private readonly double _originalHeight;
+        private Uri _iconPath;
 
         public ImageResizerPreview()
         {
             InitializeComponent();
-            _originalWidth = BackgroundRect.ActualWidth;
-            _originalHeight = BackgroundRect.ActualHeight;
         }
 
-        public ImageSource Source { 
-            get 
-            {
-                return _imageSource;
-            } 
-            set 
-            {
-                ResizeImage.Source = value;
-                _imageSource = value;
-                ScaleImage(_scale);
-            }
+        public void LoadImageFile(Uri fileUri, double scale = 1.0)
+        {
+            var originalImage = new BitmapImage(fileUri);
+            _imageSource = originalImage;
+            _iconPath = fileUri;
+            ScaleImage(scale);
         }
 
         public bool TransparencyBackgroundVisible {
@@ -58,11 +44,7 @@ namespace StreamDeckIconResizer
         /// Current scale of the image. 1.0 is the regular
         /// size of the image
         /// </summary>
-        public double Scale { 
-            get { 
-                return _scale; 
-            } 
-        }
+        public double Scale { get; private set; }
 
         /// <summary>
         /// Scales the foreground image by X percent
@@ -70,13 +52,39 @@ namespace StreamDeckIconResizer
         /// <param name="percent">Expects a value between [0.0,1.0]. Beyond 1.0 will scale the image larger.</param>
         public void ScaleImage (double scale)
         {
-            _scale = scale;
+            Scale = scale;
             var resizeWidth = (int) Math.Max(BackgroundRect.ActualWidth * scale, 1.0);
             var resizeHeight = (int) Math.Max(BackgroundRect.ActualHeight * scale, 1.0);
             var resizedImage = CreateResizedImage(_imageSource, resizeWidth, resizeHeight);
             ResizeImage.Source = resizedImage;
         }
 
+        public void SaveDisplayedIconResized()
+        {
+            if (_iconPath == null)
+            {
+                return;
+            }
+
+            //Saves the image as png
+            using (var icon = Image.Load<Rgba32>(_iconPath.AbsolutePath))
+            {
+                var canvasWidth = 512;
+                var canvasHeight = 512;
+                var resizeWidth = (int)Math.Max(canvasWidth * Scale, 1.0);
+                var resizeHeight = (int)Math.Max(canvasHeight * Scale, 1.0);
+
+
+                using (var resizedImage = IconResizer.ResizeImage(icon, resizeWidth, resizeHeight, canvasWidth, canvasHeight))
+                {
+                    var fullPath = _iconPath.AbsolutePath;
+                    var originalFilePath = System.IO.Path.GetFullPath(fullPath);
+                    var resizedFileName = System.IO.Path.GetFileNameWithoutExtension(fullPath);
+                    var resizedFilePath = originalFilePath + "_resized.png";
+                    IconResizer.SaveImagePng(resizedImage, resizedFilePath);
+                }
+            }
+        }
 
         /// <summary>
         /// Resizes an image to fit inside a given width and height

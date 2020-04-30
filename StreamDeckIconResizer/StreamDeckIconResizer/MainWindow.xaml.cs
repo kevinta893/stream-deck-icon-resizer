@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace StreamDeckIconResizer
 {
@@ -27,23 +18,9 @@ namespace StreamDeckIconResizer
             ".jpg", ".bmp", ".gif", ".svg", ".png",
         };
 
-        private WriteableBitmap _workingImage;
-        private string _workingImagePath;
-
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        public void LoadImageFile(Uri fileUri)
-        {
-            var originalImage = new BitmapImage(fileUri);
-            _workingImage = new WriteableBitmap(originalImage);
-            ResizeImage.Source = originalImage;
-
-            var filePath = fileUri.AbsolutePath.ToString();
-            _workingImagePath = filePath;
-            CurrentFileLabel.Content = filePath;
         }
 
         private void UpdateScaleText(double percent)
@@ -68,7 +45,10 @@ namespace StreamDeckIconResizer
             if (File.Exists(filePath) && isSupportedFileExtension)
             {
                 var absoluteUri = new Uri(filePath);
-                LoadImageFile(absoluteUri);
+                var percentScale = ImageScaleSlider.Value / ImageScaleSlider.Maximum;
+                UpdateScaleText(percentScale);
+                ResizeImage.LoadImageFile(absoluteUri, percentScale);
+                CurrentFileLabel.Content = filePath;
             }
 
             e.Handled = true;
@@ -82,12 +62,17 @@ namespace StreamDeckIconResizer
             ResizeImage.ScaleImage(percentScale);
         }
 
-        #endregion
-
         private void ShowTransparencyBackgroundCheckbox_Click(object sender, RoutedEventArgs e)
         {
             var checkbox = (CheckBox)e.Source;
             ResizeImage.TransparencyBackgroundVisible = checkbox.IsChecked.HasValue ? checkbox.IsChecked.Value : false;
+        }
+
+        #endregion
+
+        private void ResizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ResizeImage.SaveDisplayedIconResized();
         }
     }
 }
