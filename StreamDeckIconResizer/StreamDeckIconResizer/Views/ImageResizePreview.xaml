@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:StreamDeckIconResizer.ViewModels;assembly=ImageResizePreviewViewModel"
+             xmlns:views="clr-namespace:StreamDeckIconResizer.Views"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
+             x:Class="StreamDeckIconResizer.Views.ImageResizePreview">
+  <Design.DataContext>
+    <vm:ImageResizePreviewViewModel/>
+  </Design.DataContext>
+  <Grid>
+    <Rectangle Name="BackgroundRect" Fill="Gray" DragDrop.AllowDrop="True"/>
+    <Image Name="TransparencyImage" DragDrop.AllowDrop="True"/>
+    <Image Name="BackgroundImage" DragDrop.AllowDrop="True"/>
+    <Image Name="ResizeImage" DragDrop.AllowDrop="True"/>
+    <Rectangle Name="ForegroundDragDropRect" Fill="Transparent" DragDrop.AllowDrop="True"/>
+  </Grid>
+</UserControl>

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckIconResizer", "StreamDeckIconResizer\StreamDeckIconResizer.csproj", "{A66C9C3E-FBC4-4F5A-BC23-61D407F36772}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckIconResizer", "StreamDeckIconResizer\StreamDeckIconResizer.csproj", "{717DE700-C16D-4B67-8D87-41D07EED832E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A66C9C3E-FBC4-4F5A-BC23-61D407F36772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A66C9C3E-FBC4-4F5A-BC23-61D407F36772}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A66C9C3E-FBC4-4F5A-BC23-61D407F36772}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A66C9C3E-FBC4-4F5A-BC23-61D407F36772}.Release|Any CPU.Build.0 = Release|Any CPU
+		{717DE700-C16D-4B67-8D87-41D07EED832E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{717DE700-C16D-4B67-8D87-41D07EED832E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{717DE700-C16D-4B67-8D87-41D07EED832E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{717DE700-C16D-4B67-8D87-41D07EED832E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9961AB09-3810-43C0-9C9E-D0B6D6927EB2}
+		SolutionGuid = {475DFB05-7138-4BF6-9266-6CCD1193FE01}
 	EndGlobalSection
 EndGlobal
