@@ -33,9 +33,11 @@ namespace StreamDeckIconResizer.Views
             ShowTransparencyCheckbox.PropertyChanged += ShowTransparencyCheckbox_PropertyChanged;
 
             ImageResizePreview = this.Find<ImageResizePreview>(nameof(ImageResizePreview));
+            ImageResizePreview.ImageFileDropped += ImageResizePreview_ImageFileDropped;
+
             WorkingImagePath = this.Find<TextBlock>(nameof(WorkingImagePath));
 
-            ImageResizePreview.ImageFileDropped += ImageResizePreview_ImageFileDropped;
+            ToolTip.SetShowDelay(ImageScaleSlider, 200);
         }
 
         private void InitializeComponent()
@@ -68,6 +70,9 @@ namespace StreamDeckIconResizer.Views
                 _lastImageScaleUpdate = scale;
                 ImageResizePreview.ImageScale = scale;
             }
+
+            var scalePercent = (scale).ToString("P1");
+            ToolTip.SetTip(slider, scalePercent);
         }
 
         private void ImageResizePreview_ImageFileDropped(object sender, string filePath)
