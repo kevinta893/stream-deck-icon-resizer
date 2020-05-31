@@ -20,7 +20,8 @@
       <Slider Name="ImageScaleSlider" Value="{Binding ImageScalePercent}" SmallChange="0.1" Minimum="1" Maximum="100" TickFrequency="10" ToolTip.Tip="Changes the icon's scale" Width="300" Canvas.Left="5" Canvas.Top="350" />
       <Button Name="ResizeButton" Content="Resize" Width="100" Height="50" Canvas.Right="5" Canvas.Bottom="5"/>
       <StackPanel Canvas.Right="10" Canvas.Top="25">
-        <CheckBox Name="ShowTransparencyCheckbox" Content="Show transparency" IsChecked="{Binding ShowTransparencyBackground}"/>
+        <CheckBox Name="ShowTransparencyCheckbox" Content="Show Transparency" IsChecked="{Binding ShowTransparencyBackground}"/>
+        <CheckBox Name="InvertColorsCheckbox" Content="Invert Colors" IsChecked="{Binding InvertColors}" Padding="5"/>
       </StackPanel>
     </Canvas>
 </Window>

@@ -12,8 +12,7 @@ namespace StreamDeckIconResizer
     {
         /// <summary>
         /// Resizes an image
-        /// Original image not modified and the returned image
-        /// is a copy resized.
+        /// Returns copy of original image
         /// </summary>
         /// <param name="icon">Icon original to resize</param>
         /// <param name="resizeWidth">The width in pixels to resize the icon to</param>
@@ -33,7 +32,17 @@ namespace StreamDeckIconResizer
 
                 return resizedImage;
             }
+        }
 
+        /// <summary>
+        /// Inverts image colors.
+        /// Returns copy of original image
+        /// </summary>
+        /// <param name="icon"></param>
+        /// <returns></returns>
+        public static Image<Rgba32> InvertImage(Image<Rgba32> image)
+        {
+            return image.Clone(i => i.Invert());
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ namespace StreamDeckIconResizer.Views
         private Button ResizeButton { get; }
         private Slider ImageScaleSlider { get; }
         private CheckBox ShowTransparencyCheckbox { get; }
+        private CheckBox InvertColorsCheckbox { get; }
         private ImageResizePreview ImageResizePreview { get; }
         private TextBlock WorkingImagePath { get; }
 
@@ -31,6 +32,9 @@ namespace StreamDeckIconResizer.Views
 
             ShowTransparencyCheckbox = this.Find<CheckBox>(nameof(ShowTransparencyCheckbox));
             ShowTransparencyCheckbox.PropertyChanged += ShowTransparencyCheckbox_PropertyChanged;
+
+            InvertColorsCheckbox = this.Find<CheckBox>(nameof(InvertColorsCheckbox));
+            InvertColorsCheckbox.PropertyChanged += InvertColorsCheckbox_PropertyChanged;
 
             ImageResizePreview = this.Find<ImageResizePreview>(nameof(ImageResizePreview));
             ImageResizePreview.ImageFileDropped += ImageResizePreview_ImageFileDropped;
@@ -56,6 +60,12 @@ namespace StreamDeckIconResizer.Views
         {
             var checkbox = sender as CheckBox;
             ImageResizePreview.TransparencyBackgroundVisible = checkbox.IsChecked.HasValue ? checkbox.IsChecked.Value : false;
+        }
+
+        private void InvertColorsCheckbox_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            ImageResizePreview.InvertColor = checkbox.IsChecked.HasValue ? checkbox.IsChecked.Value : false;
         }
 
         private void ImageScaleSlider_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)

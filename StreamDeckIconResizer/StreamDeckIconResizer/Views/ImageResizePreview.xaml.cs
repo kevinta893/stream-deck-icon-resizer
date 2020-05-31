@@ -79,6 +79,19 @@ namespace StreamDeckIconResizer.Views
             }
         }
 
+        private bool _invertColor;
+        public bool InvertColor {
+            get
+            {
+                return _invertColor;
+            }
+            set
+            {
+                _invertColor = value;
+                DisplayImage();
+            }
+        }
+
 
         private double _imageScale = 1.0;
         /// <summary>
@@ -131,16 +144,16 @@ namespace StreamDeckIconResizer.Views
 
             // Resize before display
             using (var scaledImage = ScaleImage(_workingImage, _imageScale))
+            using (var invertedImage = _invertColor ? InvertImage(scaledImage) : scaledImage)
             {
-                var convertedBitmap = ConvertToAvaloniaBitmap(scaledImage);
+                var convertedBitmap = ConvertToAvaloniaBitmap(invertedImage);
                 ResizeImage.Source = convertedBitmap;
             }
         }
 
         /// <summary>
         /// Exports the currently set image to a file
-        /// Saves image as png and resizes it to the the scale set
-        /// in the previewer
+        /// Saves image as png and applies all effects to the image before saving
         /// </summary>
         public void ExportImage()
         {
@@ -152,11 +165,14 @@ namespace StreamDeckIconResizer.Views
             const string ResizedImageSuffix = "_resized";
             const string PngExtension = ".png";
 
-            var resizedImage = ScaleImage(_workingImage, _imageScale);
-            var resizedImageName = System.IO.Path.GetFileNameWithoutExtension(_workingImagePath) + ResizedImageSuffix + PngExtension;
-            var resizedImagePath = System.IO.Path.Join(System.IO.Path.GetDirectoryName(_workingImagePath), resizedImageName);
+            using (var resizedImage = ScaleImage(_workingImage, _imageScale))
+            using (var invertedImage = _invertColor ? InvertImage(resizedImage) : resizedImage)
+            {
+                var resizedImageName = System.IO.Path.GetFileNameWithoutExtension(_workingImagePath) + ResizedImageSuffix + PngExtension;
+                var resizedImagePath = System.IO.Path.Join(System.IO.Path.GetDirectoryName(_workingImagePath), resizedImageName);
 
-            IconResizer.SaveImagePng(resizedImage, resizedImagePath);
+                IconResizer.SaveImagePng(invertedImage, resizedImagePath);
+            }
         }
 
         #region Utility Functions
@@ -194,6 +210,16 @@ namespace StreamDeckIconResizer.Views
             var resizeHeight = (int) Math.Max(canvasHeight * scale, 1.0);
 
             return IconResizer.ResizeImage(sourceImage, resizeWidth, resizeHeight, canvasWidth, canvasHeight);
+        }
+
+        /// <summary>
+        /// Inverts the colors of the image
+        /// </summary>
+        /// <param name="sourceImage"></param>
+        /// <returns></returns>
+        private static Image<Rgba32> InvertImage(Image<Rgba32> sourceImage)
+        {
+            return IconResizer.InvertImage(sourceImage);
         }
 
         /// <summary>
